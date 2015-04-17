@@ -8,12 +8,25 @@
 <body>
   <div class="title">Conserve Water</div>
   <script>
- 
     var waterArray; 
+    var streamArray;
     var socket = io();
+
     socket.on('send tweet', function(ary){
       waterArray = ary; 
-      document.querySelector('body').appendChild(waterArray);
+      var content = document.createElement('div');
+      content.innerHTML = waterArray;
+      document.querySelector('body').appendChild(content);
+    });
+  
+    socket.on('add tweet', function(obj){
+      waterArray = [];
+      waterArray.push("@"+obj.user.screen_name+" "+obj.text);
+      var content = document.createElement('div');
+      content.innerHTML = waterArray;
+      var body = document.querySelector('body');
+      body.removeChild(body.firstChild);
+      body.appendChild(content);
     });
   </script>
 </body>

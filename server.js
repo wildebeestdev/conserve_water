@@ -28,20 +28,23 @@ var client = new Twit({
  
 console.log("Server is Listening");
 
-client.get('search/tweets', {q: '#conservewater', count: 100}, function(err, data, res){
-  var tweets = data.statuses.map(function(obj){
-    return "@"+obj.user.screen_name + " " + obj.text;
+
+io.on('connection', function(){
+  client.get('search/tweets', {q: '#conservewater', count: 100}, function(err, data, res){
+    var grabTweets = [];
+    var tweets = data.statuses.map(function(obj){
+      grabTweets.push("@"+obj.user.screen_name + " " + obj.text);
+      return "@"+obj.user.screen_name + " " + obj.text;
+    });
+    io.emit('send tweet', tweets);
   });
-  io.emit('send tweet', tweets);
 });
 
-
-var stream = client.stream('statuses/filter', {track: '#drought, #waterconservation, #conservewater, #savewater, #waterreuse, #cadrought, #wildebeest'}, function(err, data, res){
-  console.log("streaming");
+var stream = client.stream('statuses/filter', {track: '#Unfriended, #drought, #waterconservation, #conservewater, #savewater, #waterreuse, #cadrought, #wildebeest'}, function(err, data, res){
 });
  
 stream.on('tweet', function(tweet){
-  waterArray.push("@"+tweet.user.screen_name + " " + tweet.text); 
+  //waterArray.push("@"+tweet.user.screen_name + " " + tweet.text); 
   console.log("@"+tweet.user.screen_name + " " + tweet.text);
-  io.emit('send tweet', waterArray);
+  io.emit('add tweet', tweet);
 }); 
