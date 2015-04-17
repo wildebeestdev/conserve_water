@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Conserve Water</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.3.5/socket.io.min.js"></script>
+</head>
+ 
+<body>
+  <div class="title">Conserve Water</div>
+  <script>
+ 
+    var waterArray; 
+    var socket = io();
+    socket.on('send tweet', function(ary){
+      waterArray = ary; 
+      document.querySelector('body').appendChild(waterArray);
+    });
+  </script>
+</body>
+</html>
+
